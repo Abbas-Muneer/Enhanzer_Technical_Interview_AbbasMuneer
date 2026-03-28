@@ -1,18 +1,18 @@
+using Enhanzer.Api.DTOs;
 using Enhanzer.Api.Interfaces;
-using Enhanzer.Api.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Enhanzer.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LocationsController(ILocationService locationService) : ControllerBase
+public class LocationsController(IMasterDataService masterDataService) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetLocations(CancellationToken cancellationToken)
     {
-        var locations = await locationService.GetLocationsAsync(cancellationToken);
+        var locations = await masterDataService.GetLocationsAsync(cancellationToken);
         return Ok(locations);
     }
 }

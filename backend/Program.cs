@@ -14,14 +14,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    if (dbContext.Database.IsSqlite())
-    {
-        dbContext.Database.EnsureCreated();
-    }
-    else
-    {
-        dbContext.Database.Migrate();
-    }
+    dbContext.Database.EnsureCreated();
+    await DbSeeder.SeedAsync(dbContext);
 }
 
 app.UseApplicationPipeline();

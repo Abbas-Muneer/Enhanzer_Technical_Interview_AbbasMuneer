@@ -1,5 +1,6 @@
 using Enhanzer.Api.Data;
 using Enhanzer.Api.Interfaces;
+using Enhanzer.Api.Repositories;
 using Enhanzer.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,14 +26,14 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(connectionString);
         });
 
-        services.AddHttpClient<IExternalPosApiService, ExternalPosApiService>(client =>
-        {
-            client.BaseAddress = new Uri(configuration["ExternalPosApi:BaseUrl"]!);
-            client.Timeout = TimeSpan.FromSeconds(30);
-        });
+        services.AddScoped<ILocationRepository, LocationRepository>();
+        services.AddScoped<IItemRepository, ItemRepository>();
+        services.AddScoped<IPurchaseBillRepository, PurchaseBillRepository>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IMasterDataService, MasterDataService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
+        services.AddScoped<IPurchaseBillService, PurchaseBillService>();
 
         var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
         services.AddCors(options =>
